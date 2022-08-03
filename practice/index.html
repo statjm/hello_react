@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!-- React JS 가져오기 interactivity -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script> 
+    <!-- React -> HTML  -->
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- props types check -->
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+    <!-- JSX -> HTML head에 넣어줌 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        // function Btn(props){
+        function Btn({text, changeValue, fontSize = 12}){
+            console.log(text, "was rendered");
+            return <button onClick={changeValue} style={{
+                backgroundColor: "tomato",
+                color:"white",
+                padding:"10px 20px",
+                borderRadius:10,
+                border:0,
+                fontSize
+            }}
+            >{text}</button>
+        }
+        const MemorizedBtn = React.memo(Btn)
+        Btn.propTypes = {
+            text: PropTypes.string.isRequired,
+            fontSize: PropTypes.number,
+            changeValue: PropTypes.func,
+        }
+        function App(){
+            const [value, setValue] = React.useState("Save Changes")
+            const changeValue = () => setValue("Revert Changes")
+            // Btn({banana:"Save Changes"})
+            // Continue는 다시그려지길 원하지 않아 : React Memo
+            return (
+                <div>
+                    <MemorizedBtn text={value} changeValue={changeValue} fontSize={18}/>
+                    <MemorizedBtn text="Continue"/>
+                </div>
+            );
+        }
+            
+        const root = document.getElementById("root")
+        ReactDOM.render(<App/>, root);
+    </script>
+</html>
